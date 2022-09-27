@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/gkranasinghe/k8s
-    targetRevision: HEAD
+    targetRevision: master
     path: distribution/nfs-provisioner
     kustomize:
       version: v4.0.5
