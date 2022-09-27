@@ -1,6 +1,3 @@
-# Ignore kustomize build  charts
-./distribution/**/base/charts
-
 # Local .terraform directories
 terraform/**/.terraform/*
 
