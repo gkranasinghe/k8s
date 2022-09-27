@@ -7,5 +7,5 @@ metadata:
     app.kubernetes.io/name: argocd-cm
     app.kubernetes.io/part-of: argocd
 data:
-  kustomize.version.v4.0.5: /custom-tools/kustomize_4_0_5
+  kustomize.version.v4.5.4: /custom-tools/kustomize_4_5_4
   kustomize.buildOptions: --enable-helm
