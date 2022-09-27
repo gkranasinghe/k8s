@@ -76,11 +76,11 @@
                   sudo systemctl enable patch.service
                   sudo systemctl start patch.service
 
-- hosts:
-  - localhost
-  tasks:
+# - hosts:
+#   - localhost
+#   tasks:
 
-     - name: change to kustomize file directory for nfs-server
-       shell: |
-               cd ../kustomize/nfs-provisioner
-               kustomize build .   --enable-helm |kubectl apply -f -
+#      - name: change to kustomize file directory for nfs-server
+#        shell: |
+#                cd ../kustomize/nfs-provisioner
+#                kustomize build .   --enable-helm |kubectl apply -f -
