@@ -11,8 +11,6 @@ helmCharts:
   namespace: "airflow"
   releaseName: "airflow"
   valuesInline: 
-    # redis.enabled: 'False'
-    # flower.enabled: 'False'
     extraEnv: |
       - name: AIRFLOW__CORE__LOAD_EXAMPLES
         value: 'True'
