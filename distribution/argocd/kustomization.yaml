@@ -3,7 +3,7 @@ resources:
 
 patchesStrategicMerge:
 - config-map-patch.yaml
-
+- add-custom-kustomize-patch.yaml
 patchesJson6902:
 - target:
     version: v1
