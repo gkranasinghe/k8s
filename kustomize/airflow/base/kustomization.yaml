@@ -12,6 +12,8 @@ helmCharts:
   releaseName: "airflow"
   valuesInline: 
     extraEnv: |
+      createUserJob.useHelmHooks: false
+      migrateDatabaseJob.useHelmHooks: false
       - name: AIRFLOW__CORE__LOAD_EXAMPLES
         value: 'True'
 
