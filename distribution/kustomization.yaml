@@ -7,6 +7,6 @@ resources:
 - argocd-applications/argocd.yaml
 
 #Airflow
-- argocd-applications/airflow.yaml
+# - argocd-applications/airflow.yaml
 
 # Pick *one* of the following applications
