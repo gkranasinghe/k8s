@@ -1,6 +1,0 @@
-resources:
-- base
-
-patchesStrategicMerge:
-- default-storageclass-patch.yaml
-

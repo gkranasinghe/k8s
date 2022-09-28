@@ -79,7 +79,6 @@
 # - hosts:
 #   - localhost
 #   tasks:
-
 #      - name: change to kustomize file directory for nfs-server
 #        shell: |
 #                cd ../kustomize/nfs-provisioner

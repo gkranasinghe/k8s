@@ -143,11 +143,6 @@
      - name: prepare nodes to connect to nfs server
        shell: sudo   apt install -y nfs-common
 
-
-
-
-
-
      - name: Create a new file with permissions
        file:
           path: "/root/patch.sh"

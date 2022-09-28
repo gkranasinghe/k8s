@@ -1,0 +1,24 @@
+- hosts:
+  - localhost
+  tasks:
+    # - name: ensure python3 is installed
+    #   ansible.builtin.package:
+    #     name:
+    #       - python3
+    #       - python3-pip
+    #     state: present
+
+    - name: install kubernetes pip package
+      pip:
+        name: kubernetes
+        state: present
+
+
+    - name: install collections
+      shell: |
+                ansible-galaxy collection install kubernetes.core
+                ansible-galaxy collection install community.kubernetes
+                ansible-galaxy collection install cloud.common
+
+
+

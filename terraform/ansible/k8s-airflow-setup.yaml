@@ -1,0 +1,31 @@
+
+- hosts:
+  - localhost
+  tasks:
+
+
+    - name: Add airflow namespace
+      shell: |
+                kubectl create namespace airflow
+
+    - name: Airflow install with Helm
+      shell: |
+                helm repo add apache-airflow https://airflow.apache.org
+                helm repo update
+                helm install airflow apache-airflow/airflow --namespace airflow --debug --timeout 10m0s
+
+    - name: wait for pods to come up
+      shell: kubectl get pods -n airflow  -o json
+      register: kubectl_get_pods
+      until: kubectl_get_pods.stdout|from_json|json_query('items[*].status.phase')|unique == ["Running"]
+      retries: 10
+      delay: 30
+
+    - name: Patch airflow service as loadbalancer
+      shell: |
+                kubectl patch svc airflow -n airflow  -p '{"spec": {"type": "LoadBalancer"}}'
+                helm show values apache-airflow/airflow > airflow-values.yaml
+
+    - name: get values.yaml
+      shell: |
+                helm show values apache-airflow/airflow > airflow-values.yaml
