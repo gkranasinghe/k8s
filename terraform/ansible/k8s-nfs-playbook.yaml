@@ -12,10 +12,10 @@
                 sudo apt update -qq && sudo apt install -qq -y  nfs-server
 
 
-      # - name: mount nfs_source drive to   shared file path inside container 
-      #   shell: |
-      #           sudo mkdir -p /nfs-storage
-      #           sudo mount {{nfs_source}}  /nfs-storage
+      - name: mount nfs_source drive to   shared file path inside container 
+        shell: |
+                sudo mkdir -p /nfs-storage
+                sudo mount {{nfs_source}}  /nfs-storage
       
       - name: Test for line
         shell: grep -c "nfs-storage" /etc/exports || true
