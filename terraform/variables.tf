@@ -19,7 +19,7 @@ variable "nfs_ip" {
 
 variable "ansible_dir" {
   type    = string
-  default = "./ansible/"
+  default = "./ansible"
 }
 
 variable "nfs_source" {
