@@ -13,26 +13,27 @@
         name: metallb
         repo_url: "{{ helm_chart_url }}"
 
-
     - name: Create a k8s namespace
       kubernetes.core.k8s:
         name: "{{ k8_name_space }}"
         api_version: v1
         kind: Namespace
         state: present
+    #chart version 0.13.0 onwards has breaking changes and doesnot support configInline
 
     - name: Install metallb 
       kubernetes.core.helm:
         name: metallb
         namespace: "{{ k8_name_space }}"
         chart_ref: metallb/metallb
+        chart_version: "0.12.1" 
         values:
           configInline:
-          address-pools:
-          - name: default
-            protocol: layer2
-            addresses:
-            - 10.140.19.240-10.140.19.250
+            address-pools:
+            - name: default
+              protocol: layer2
+              addresses:
+              - 10.140.19.240-10.140.19.250
     
     - name: wait for pods to come up
       shell: kubectl get pods -n {{k8_name_space}}  -o json
@@ -41,15 +42,15 @@
       retries: 10
       delay: 30
 
-    - name: Create a IPAddressPool object from an inline definition
-      kubernetes.core.k8s:
-        state: present
-        definition:
-          apiVersion: metallb.io/v1beta1
-          kind: IPAddressPool
-          metadata:
-            name: default
-            namespace: metallb-system
-          spec:
-            addresses:
-            - 10.140.19.240-10.140.19.250
+    # - name: Create a IPAddressPool object from an inline definition
+    #   kubernetes.core.k8s:
+    #     state: present
+    #     definition:
+    #       apiVersion: metallb.io/v1beta1
+    #       kind: IPAddressPool
+    #       metadata:
+    #         name: default
+    #         namespace: metallb-system
+    #       spec:
+    #         addresses:
+    #         - 10.140.19.240-10.140.19.250
