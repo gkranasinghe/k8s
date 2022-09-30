@@ -20,5 +20,8 @@
                 ansible-galaxy collection install community.kubernetes
                 ansible-galaxy collection install cloud.common
 
+    - name: setup local docker registry
+      shell: |
+                docker run -d -p 5000:5000 --restart=always --name registry registry:2
 
 
