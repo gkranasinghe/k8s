@@ -1,0 +1,63 @@
+- hosts: localhost
+  vars: 
+     k8_name_space: "minio"
+  tasks:
+    - name: Add minio namespace
+      shell: |
+                kubectl create namespace {{k8_name_space}}
+                helm repo add bitnami https://charts.bitnami.com/bitnami
+                helm install minio bitnami/minio --namespace minio --create-namespace
+
+    - name: wait for pods to come up
+      shell: kubectl get pods -n {{k8_name_space}}  -o json
+      register: kubectl_get_pods
+      until: kubectl_get_pods.stdout|from_json|json_query('items[*].status.phase')|unique == ["Running"]
+      retries: 10
+      delay: 30
+
+
+           
+    - name: Patch minio service as loadbalancer
+      shell: |
+                kubectl patch svc minio  -n {{k8_name_space}}  -p '{"spec": {"type": "LoadBalancer"}}'
+# NAME: minio
+# LAST DEPLOYED: Mon Oct  3 18:11:38 2022
+# NAMESPACE: minio
+# STATUS: deployed
+# REVISION: 1
+# TEST SUITE: None
+# NOTES:
+# CHART NAME: minio
+# CHART VERSION: 11.10.3
+# APP VERSION: 2022.9.7
+
+# ** Please be patient while the chart is being deployed **
+
+# MinIO&reg; can be accessed via port  on the following DNS name from within your cluster:
+
+#    minio.minio.svc.cluster.local
+
+# To get your credentials run:
+
+#    export ROOT_USER=$(kubectl get secret --namespace minio minio -o jsonpath="{.data.root-user}" | base64 -d)
+#    export ROOT_PASSWORD=$(kubectl get secret --namespace minio minio -o jsonpath="{.data.root-password}" | base64 -d)
+#admin
+#behUcVcTIF
+
+# To connect to your MinIO&reg; server using a client:
+
+# - Run a MinIO&reg; Client pod and append the desired command (e.g. 'admin info'):
+
+#    kubectl run --namespace minio minio-client \
+#      --rm --tty -i --restart='Never' \
+#      --env MINIO_SERVER_ROOT_USER=$ROOT_USER \
+#      --env MINIO_SERVER_ROOT_PASSWORD=$ROOT_PASSWORD \
+#      --env MINIO_SERVER_HOST=minio \
+#      --image docker.io/bitnami/minio-client:2022.8.28-debian-11-r6 -- admin info minio
+
+# To access the MinIO&reg; web UI:
+
+# - Get the MinIO&reg; URL:
+
+#    echo "MinIO&reg; web URL: http://127.0.0.1:9001/minio"
+#    kubectl port-forward --namespace minio svc/minio 9001:9001

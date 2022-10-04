@@ -1,0 +1,24 @@
+- hosts: localhost
+  vars: 
+     k8_name_space: "spark"
+  tasks:
+    - name: Add spark namespace
+      shell: |
+                kubectl create namespace {{k8_name_space}}
+                helm repo add bitnami https://charts.bitnami.com/bitnami
+                helm install minio bitnami/minio
+
+    - name: wait for pods to come up
+      shell: kubectl get pods -n {{k8_name_space}}  -o json
+      register: kubectl_get_pods
+      until: kubectl_get_pods.stdout|from_json|json_query('items[*].status.phase')|unique == ["Running"]
+      retries: 10
+      delay: 30
+
+    # - name: cp data for seeding  
+    #   shell: |
+    #             kubectl cp data.dump  {{k8_name_space}}/postgresql-0:/tmp  -c postgresql
+           
+    - name: Patch postgresql service as loadbalancer
+      shell: |
+                kubectl patch svc  -n postgresql  -p '{"spec": {"type": "LoadBalancer"}}'
